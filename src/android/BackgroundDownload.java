@@ -356,7 +356,10 @@ public class BackgroundDownload extends CordovaPlugin {
             query.setFilterById(downloadId);
             Cursor cursor = mgr.query(query);
             int idxURI = cursor.getColumnIndex(DownloadManager.COLUMN_URI);
-            cursor.moveToFirst();
+            if(!cursor.moveToFirst()){
+                cursor.close();
+                return;
+            }
             String uri = cursor.getString(idxURI);
 
             Download curDownload = activDownloads.get(uri);
@@ -376,6 +379,7 @@ public class BackgroundDownload extends CordovaPlugin {
                         curDownload.getCallbackContextDownloadStart().error("Download operation failed with status " + status + " and reason: "    + getUserFriendlyReason(reason));
                     }
                 } else {
+                    //this condition might never apply
                     curDownload.getCallbackContextDownloadStart().error("cancelled or terminated");
                 }
                 cursor.close();
@@ -383,7 +387,7 @@ public class BackgroundDownload extends CordovaPlugin {
                 curDownload.getCallbackContextDownloadStart().error(ex.getMessage());
             } finally {
                 CleanUp(curDownload);
-            }
+            } 
         }
     };
 

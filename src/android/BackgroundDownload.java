@@ -297,6 +297,7 @@ public class BackgroundDownload extends CordovaPlugin {
         }
 
         DownloadManager mgr = (DownloadManager) cordova.getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
+        activDownloads.remove(curDownload.getUriString());
         mgr.remove(curDownload.getDownloadId());
         callbackContext.success();
     }
@@ -357,6 +358,7 @@ public class BackgroundDownload extends CordovaPlugin {
             Cursor cursor = mgr.query(query);
             int idxURI = cursor.getColumnIndex(DownloadManager.COLUMN_URI);
             if(!cursor.moveToFirst()){
+                //if no Download with the given ID is found (happens when DL is cancelled manually - DownloadManager broadcasts DOWNLOAD_COMPLETE one more time)
                 cursor.close();
                 return;
             }

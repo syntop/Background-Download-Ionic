@@ -388,7 +388,9 @@ public class BackgroundDownload extends CordovaPlugin {
             } catch (Exception ex) {
                 curDownload.getCallbackContextDownloadStart().error(ex.getMessage());
             } finally {
-                CleanUp(curDownload);
+                if(curDownload != null){
+                    CleanUp(curDownload);
+                }
             } 
         }
     };

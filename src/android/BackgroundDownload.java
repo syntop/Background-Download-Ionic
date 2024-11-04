@@ -148,7 +148,7 @@ public class BackgroundDownload extends CordovaPlugin {
     private void startAsync(JSONArray args, CallbackContext callbackContext) throws JSONException {
         if (activDownloads.size() == 0) {
             // required to receive notification when download is completed
-            cordova.getActivity().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            cordova.getActivity().registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
         }
 
         Download curDownload = new Download(args.get(0).toString(), args.get(1).toString(), callbackContext);
